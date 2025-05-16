@@ -1,0 +1,33 @@
+version : '2.2'
+services:
+  postgresql:
+    image : postgres
+    container_name: postgres_db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "hello123inoPG"
+      POSTGRES_DB: "profilely"
+  pgadmin:
+    image : dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "profilely@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "adminprofilely"
+    ports:
+      - "8080:80"  # host:container (access in browser via localhost:8080)
+    depends_on:
+      - postgresql
+  profilely:
+    image : ashbytes/profilely:latest
+    container_name: profilely
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgresql
+    
